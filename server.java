@@ -4,7 +4,10 @@ import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.*;
 import java.net.*;
+import java.util.Arrays;
 import java.util.Scanner;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 public class server {
     public static void main(String[] args) throws IOException {
@@ -28,17 +31,48 @@ public class server {
                 bufferedWriter = new BufferedWriter(outputStreamWriter);
 
                 Scanner sc = new Scanner(System.in);
+//                LocalDateTime now = LocalDateTime.now();
+//                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm:ss");
+//                String currentTime = now.format(formatter);
 
                 while (true){
-                    String msgforClient = bufferedReader.readLine();
-                    System.out.println("msg from client: " + msgforClient);
-
-                    String serverResponse = sc.nextLine();
-                    bufferedWriter.write(serverResponse);
+                    String msgfromClient = bufferedReader.readLine();
+                    System.out.println("msg from client: " + msgfromClient);
+                    String[] strNums = msgfromClient.split(",");
+                    int[] arr = new int[strNums.length];
+                    for (int i = 0; i < strNums.length; i++) {
+                        arr[i] = Integer.parseInt(strNums[i]);
+                    }
+                    int n = arr.length;
+                    for (int i = 0; i < n - 1; i++) {
+                        for (int j = 0; j < n - 1 - i; j++) {
+                            if (arr[j] > arr[j + 1]) {
+                                // Swap elements
+                                int temp = arr[j];
+                                arr[j] = arr[j + 1];
+                                arr[j + 1] = temp;
+                            }
+                        }
+                    }
+                    int[] serverResponse = arr;
+                    bufferedWriter.write(Arrays.toString(serverResponse));
                     bufferedWriter.newLine();
                     bufferedWriter.flush();
+//                    String reverse = new StringBuilder(msgfromClient).reverse().toString();
+//                    if (msgfromClient.equalsIgnoreCase("Whats the time"))
+//                        serverResponse = currentTime;
+//                        bufferedWriter.write(serverResponse);
+//                        bufferedWriter.newLine();
+//                        bufferedWriter.flush();
+//
+//                    if (msgfromClient.equalsIgnoreCase("Reverse"))
+//                        bufferedWriter.write(reverse);
+//                        bufferedWriter.newLine();
+//                        bufferedWriter.flush();
 
-                    if (msgforClient.equalsIgnoreCase("Exit"))
+
+
+                    if (msgfromClient.equalsIgnoreCase("Exit"))
                     break;
 
 
